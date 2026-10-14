@@ -6,14 +6,31 @@ All notable changes to flutter-tvos will be documented here.
 
 ### Changed
 
-- **Upgraded to Flutter 3.47.7** (`abaf9c523780a608bd46686fd5e53740a07077f8`).
-  Engine artifacts rebuilt from the ported patch set and published as
+- **Engine artifacts rebuilt** with the two fixes below and published as
   [`engine-b118f6897f8f3427d1390c80bbefa90ee948c97e`](https://github.com/fluttertv/engine-artifacts/releases/tag/engine-b118f6897f8f3427d1390c80bbefa90ee948c97e).
+  Flutter is unchanged at 3.47.7.
 
-  Ported automatically by the release train: the patch set applied and the tvOS
-  engine unit tests passed, the CLI analyzes and tests clean against the new
-  SDK, and the end-to-end matrix ran on a tvOS simulator with the device
-  profile and release builds compiled.
+  Released by the release train: the tvOS engine unit tests passed, the CLI
+  analyzes and tests clean, and the end-to-end matrix ran on a tvOS simulator
+  with the device profile and release builds compiled.
+
+### Fixed
+
+- **A key held on a keyboard now comes up when the control it was pressed on
+  leaves the screen.** If the key down opened a dialog or a route, or moved
+  focus in a way that removed the focused control, the key's release never
+  arrived. Select stayed down: the next Select was swallowed, and the first
+  one's key up only arrived when that next one was released
+  ([#92](https://github.com/fluttertv/flutter-tvos/issues/92)). An arrow
+  repeated until another key was pressed. It took a keyboard and semantics
+  turned on, which they always are in the simulator; on a device, that means
+  VoiceOver, Switch Control or Speak Screen, or an app that turns semantics on
+  itself. The Siri Remote was not affected.
+
+- **A held arrow or page key stops repeating once its press has ended**, even
+  when the end-of-press callback never arrives. A missed callback used to leave
+  the key repeating every 80 ms until another key was pressed
+  ([#91](https://github.com/fluttertv/flutter-tvos/issues/91)).
 
 ## [1.11.2] - 2026-10-09
 
